@@ -16,23 +16,26 @@ function preload(){
   snowmanImg2 = loadAnimation("Snowman_2.png");
   fireImg = loadAnimation("fire1.png");
   fireImg2 = loadAnimation("fire2.png");
-  sceneimg = loadImage("background.png");
+  sceneimg = loadImage("backgroundog.png");
   snowballimg = loadImage("snowballfriend.png");
 }
 
 function setup(){
-  createCanvas(400, 400);
-  scene = createSprite(320, 100);
+  createCanvas(windowWidth, windowHeight);//400, 400
+
+  scene = createSprite(windowWidth-80, height/2-750);//320, 100
   scene.visible = false;
   scene.addImage("background", sceneimg);
-  scene.scale = 0.05;
-  snowman = createSprite(200, 200, 15, 15);
+  scene.scale = 0.2;//0.05
+
+  snowman = createSprite(width/2, height/2, 15, 15);//200, 200
   snowman.addAnimation("snowman2", snowmanImg2);
   snowman.addAnimation("snowman", snowmanImg);
-  snowman.scale = 0.2;
+  snowman.scale = 0.5;//0.2
   snowman.visible = false;
   //snowman.debug = true;
   snowman.setCollider("rectangle", 0, 45, 70, 310);
+
   edges = createEdgeSprites();
   
   fireG = new Group();
@@ -43,12 +46,15 @@ function draw(){
   background('lightblue');
   if(gamestate == "server"){
     fill('cyan');
-    textSize(13);
-    text("Dica: Quando Você Sobrevive Por Um Tempo Ganha Uma Bola", 15, 75);
-    text("De Neve!", 15, 95);
+    stroke('green');
+    textSize(20);
+    text("Dica: Quando Você Sobrevive Por Um Tempo ", 15, 75);
+    text("Ganha Uma Bola De Neve!", 15, 95);
     text("Dica: Pressione E Para Tacar Uma Bola De Neve!", 15, 45); 
-    text("Clique Para Começar!", 15, 15);
-    if(mousePressedOver(scene)||mousePressedOver(snowman)){
+    text("Clique Para Começar!", 15, 25);
+    if(mousePressedOver(scene)
+    ||mousePressedOver(snowman)
+    ||touches.length > 0){
       gamestate = "play";
       scene.visible = true;
       snowman.visible = true;
@@ -63,11 +69,13 @@ function draw(){
   //console.log(select);
   //console.log("snowmanY: "+Math.round(snowman.y));
   console.log(snowballnum);
-    if(scene.x < 80){
-      scene.x = 320;
+  //console.log(World.mouseX);
+  console.log(windowWidth);
+    if(scene.x < 450){//80
+      scene.x = windowWidth-800;//320
     }
-    if(scene.x > 320){
-      scene.x = 80;
+    if(scene.x > windowWidth-800){//320
+      scene.x = 450;//80
     }
   /*if(keyWentUp("left_arrow")||keyWentUp("A")){
     left = false;
@@ -92,8 +100,10 @@ function draw(){
       }
     if(keyDown("space")&&snowman.y > 285
     ||keyDown("up_arrow")&&snowman.y > 285
-    ||keyDown("W")&&snowman.y > 285){
-      snowman.velocityY = -12.5;
+    ||keyDown("W")&&snowman.y > 285
+    ||touches.length > 0&&snowman.y > 285){
+      snowman.velocityY = -15.5;
+      touches = [];
     }
     if(right == true){
       scene.velocityX = -(4+3*score/100);
@@ -135,16 +145,20 @@ function draw(){
     snowballG.destroyEach();
     textSize(25);
     fill('red');
-    text("Fim De Jogo!", 110, 200);
+    stroke('darkred');
+    text("Fim De Jogo!", width/2-110, height/2);
     fill('cyan');
-    text("Clique Para Jogar De Novo!", 85, 175);
-    
+    stroke('green');
+    text("Clique Para Jogar De Novo!", width/2-85, height/2-35);
     textSize(25);
     fill('gold');
-    text("Pontuação: "+score, 115, 145);
-    text("Melhor Pontuação: "+highscore, 85, 115);
-    if(mousePressedOver(snowman)||mousePressedOver(scene)){
+    text("Pontuação: "+score, width/2-115, height/2+45);
+    text("Melhor Pontuação: "+highscore, width/2-85, height/2+75);
+    if(mousePressedOver(snowman)
+    ||mousePressedOver(scene)
+    ||touches.length > 0){
       reset();
+      touches = [];
     }
   }
   if(gamestate == "play"||gamestate == "end"){
@@ -154,33 +168,34 @@ function draw(){
 }
 
 function createfire(){
-  if(frameCount%240==0){
+  if(frameCount%160==0){
     fire = createSprite(450, 450);//50, 350
     //fire.debug = true;
-    fire.lifetime = 150;
+    fire.lifetime = 650;
     if(select1 == 1){
-      fire.velocityX = +(5 + 2*score/150);
       fire.addAnimation("fire", fireImg);
       fire.setCollider("circle", 0, 3999, 5999);
     }
     if(select1 == 2){
-      fire.velocityX = -(6 + 2*score/150);
       fire.addAnimation("fire2", fireImg2);
       fire.setCollider("circle", 0, 3999, 2999);
     }
     if(select2 == 1){
-      fire.x = 450;
+      fire.x = -50;
+      fire.velocityX = +(5 + 2*score/150);
     }
     if(select2 == 2){
-      fire.x = -50;
+      fire.x = windowWidth+50;
+      fire.velocityX = -(6 + 2*score/150);
     }
-    if(select3 == 1){
-      fire.y = 355;
+    /*if(select3 == 1){
+      fire.y = windowHeight-355;
     }
     if(select3 == 2){
-      fire.y = 250;
-    }
-    fire.scale = 0.003;
+      fire.y = windowHeight-250;
+    }*/
+    fire.y = Math.round(random(200, 675));
+    fire.scale = 0.008;
     //console.log("Created Fire!");
     fireG.add(fire);
   }
@@ -189,13 +204,13 @@ function createfire(){
 function reset(){
   gamestate = "play";
   scene.visible = true;
-  if(score>highscore){
+  if(score > highscore){
     highscore = score;
   }
   score = 0;
   snowman.visible = true;
-  snowman.x = 200;
-  snowman.y = 200;
+  snowman.x = width/2;
+  snowman.y = height/2;
   snowballnum = 0;
 }
 
