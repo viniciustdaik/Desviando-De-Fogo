@@ -10,6 +10,9 @@ var scene, sceneimg;
 var highscore = 0;
 var snowballnum = 0;
 var snowball, snowballimg, snowballG;
+var snowballtbutton, snowballbuttonimg, 
+leftbutton, leftbuttonimg, 
+rightbutton, rightbuttonimg;
 
 function preload(){
   snowmanImg = loadAnimation("Snowman.png");
@@ -18,6 +21,9 @@ function preload(){
   fireImg2 = loadAnimation("fire2.png");
   sceneimg = loadImage("backgroundog.png");
   snowballimg = loadImage("snowballfriend.png");
+  leftbuttonimg = loadImage("left_arrow.png");
+  rightbuttonimg = loadImage("right_arrow.png");
+  snowballbuttonimg = loadImage("snowballbutton.png");
 }
 
 function setup(){
@@ -27,7 +33,19 @@ function setup(){
   scene.visible = false;
   //scene.addImage("background", sceneimg);
   //scene.scale = 0.2;//0.05 //2
-
+  
+  leftbutton = createSprite(width/2-85, 55, 15, 15);
+  leftbutton.addImage("leftbuttonimg", leftbuttonimg);
+  leftbutton.visible = false;
+  
+  rightbutton = createSprite(width/2+85, 55, 15, 15);
+  rightbutton.addImage("rightbuttonimg", rightbuttonimg);
+  rightbutton.visible = false;
+  
+  snowballbutton = createSprite(width/2, 55, 15, 15);
+  snowballbutton.addImage("snowbalbuttonimg", snowballbuttonimg);
+  snowballbutton.visible = false;
+  
   snowman = createSprite(width/2, height/2, 15, 15);//200, 200
   snowman.addAnimation("snowman2", snowmanImg2);
   snowman.addAnimation("snowman", snowmanImg);
@@ -67,6 +85,9 @@ function draw(){
       gamestate = "play";
       //scene.visible = true;
       snowman.visible = true;
+      rightbutton.visible = true;
+      leftbutton.visible = true;
+      snowballbutton.visible = true;
     }
   }
   //console.log("left: "+left);
@@ -101,14 +122,15 @@ function draw(){
     fireG.destroyEach();
   }
   if(gamestate == "play"){
-    if(snowballnum > 0&&keyWentDown("E")){
+    if(snowballnum > 0&&keyWentDown("E")
+    ||snowballnum > 0&&mouseIsOver(snowballbutton)){
       createsnowball();
     }
     if(score%500==0){
       snowballnum = snowballnum+1;
       }
     if(keyDown("space")&&snowman.y > 285
-    ||keyDown("up_arrow")&&snowman.y > 285
+    ||keyDown(UP_ARROW)&&snowman.y > 285
     ||keyDown("W")&&snowman.y > 285
     ||touches.length > 0&&snowman.y > 285){
       snowman.velocityY = -15.5;
@@ -124,19 +146,24 @@ function draw(){
     score = score + Math.round(getFrameRate()/30);
     createfire();
     
-    if(keyWentDown("left_arrow")||keyWentDown("A")){
+    if(keyWentDown(LEFT_ARROW)
+    ||keyWentDown("A")
+    ||mouseIsOver(leftbutton)){
       //snowman.x = snowman.x-5;
       left = true;
       right = false;
       snowman.changeAnimation("snowman", snowmanImg);
     }
-    if(keyWentDown("right_arrow")||keyWentDown("D")){
+    if(keyWentDown(RIGHT_ARROW)
+    ||keyWentDown("D")
+    ||mouseIsOver(rightbutton)){
       //snowman.x = snowman.x+5;
       right = true;
       left = false;
       snowman.changeAnimation("snowman2", snowmanImg2);
-    }/*
-    if(keyDown("left_arrow")&&keyDown("right_arrow")
+    }
+    
+    /*if(keyDown("left_arrow")&&keyDown("right_arrow")
     ||keyDown("D")&&keyDown("A")
     ||keyDown("D")&&keyDown("left_arrow")
     ||keyDown("A")&&keyDown("right_arrow")){
@@ -149,6 +176,9 @@ function draw(){
   if(gamestate == "end"){
     //scene.velocityX = 0;
     snowman.visible = false;
+    rightbutton.visible = false;
+    leftbutton.visible = false;
+    snowballbutton.visible = false;
     //scene.visible = false;
     fireG.destroyEach();
     snowballG.destroyEach();
@@ -217,6 +247,9 @@ function reset(){
   }
   score = 0;
   snowman.visible = true;
+  rightbutton.visible = true;
+  leftbutton.visible = true;
+  snowballbutton.visible = true;
   snowman.x = width/2;
   snowman.y = height/2;
   snowballnum = 0;
