@@ -23,10 +23,10 @@ function preload(){
 function setup(){
   createCanvas(windowWidth, windowHeight);//400, 400
 
-  scene = createSprite(windowWidth-80, height/2-750);//320, 100
+  scene = createSprite(width/2, height/2, windowWidth, windowHeight);//320, 100 //height-260 //windowWidth, height/-750
   scene.visible = false;
-  scene.addImage("background", sceneimg);
-  scene.scale = 0.2;//0.05
+  //scene.addImage("background", sceneimg);
+  //scene.scale = 0.2;//0.05 //2
 
   snowman = createSprite(width/2, height/2, 15, 15);//200, 200
   snowman.addAnimation("snowman2", snowmanImg2);
@@ -44,6 +44,15 @@ function setup(){
 
 function draw(){
   background('lightblue');
+  image(sceneimg, 0, 0, width, height);
+  if(gamestate == "end"||gamestate == "play"){
+    textSize(25);
+    fill('gold');
+    stroke('green');
+    text("Pontuação: "+score, 25, 45);
+    text("Melhor Pontuação: "+highscore, 25, 75);
+    text("Bolas De Neve: "+snowballnum, 25, 105);
+  }
   if(gamestate == "server"){
     fill('cyan');
     stroke('green');
@@ -56,7 +65,7 @@ function draw(){
     ||mousePressedOver(snowman)
     ||touches.length > 0){
       gamestate = "play";
-      scene.visible = true;
+      //scene.visible = true;
       snowman.visible = true;
     }
   }
@@ -71,12 +80,12 @@ function draw(){
   console.log(snowballnum);
   //console.log(World.mouseX);
   console.log(windowWidth);
-    if(scene.x < 450){//80
-      scene.x = windowWidth-800;//320
-    }
-    if(scene.x > windowWidth-800){//320
-      scene.x = 450;//80
-    }
+    //if(scene.x < 450){//80 //680
+    //  scene.x = windowWidth-800;//320
+    //}
+    //if(scene.x > windowWidth-800){//320
+    //  scene.x = 450;//80 //680
+    //}
   /*if(keyWentUp("left_arrow")||keyWentUp("A")){
     left = false;
   }
@@ -105,12 +114,12 @@ function draw(){
       snowman.velocityY = -15.5;
       touches = [];
     }
-    if(right == true){
-      scene.velocityX = -(4+3*score/100);
-    }
-    if(left == true){
-      scene.velocityX = +(4+3*score/100);
-    }
+    //if(right == true){
+    //  scene.velocityX = -(4+3*score/100);
+    //}
+    //if(left == true){
+    //  scene.velocityX = +(4+3*score/100);
+    //}
     
     score = score + Math.round(getFrameRate()/30);
     createfire();
@@ -138,22 +147,21 @@ function draw(){
   
   }
   if(gamestate == "end"){
-    scene.velocityX = 0;
+    //scene.velocityX = 0;
     snowman.visible = false;
-    scene.visible = false;
+    //scene.visible = false;
     fireG.destroyEach();
     snowballG.destroyEach();
     textSize(25);
+    textAlign("center");
     fill('red');
     stroke('darkred');
-    text("Fim De Jogo!", width/2-110, height/2);
+    text("Fim De Jogo!", width/2, height/2);
     fill('cyan');
     stroke('green');
-    text("Clique Para Jogar De Novo!", width/2-85, height/2-35);
-    textSize(25);
-    fill('gold');
-    text("Pontuação: "+score, width/2-115, height/2+45);
-    text("Melhor Pontuação: "+highscore, width/2-85, height/2+75);
+    text("Clique Para Jogar De Novo!", width/2, height/2-35);
+
+    
     if(mousePressedOver(snowman)
     ||mousePressedOver(scene)
     ||touches.length > 0){
@@ -203,7 +211,7 @@ function createfire(){
 
 function reset(){
   gamestate = "play";
-  scene.visible = true;
+  //scene.visible = true;
   if(score > highscore){
     highscore = score;
   }
@@ -218,7 +226,7 @@ function createsnowball(){
     snowball = createSprite(-50, -50, 15, 15);
     snowball.addImage("snowball", snowballimg);
     snowball.lifetime = 150;
-    snowballG.add(snowball);
+    snowball.scale = 2.8;
     if(left == true){
         snowballnum = snowballnum-1;
         snowball.velocityX = -(5 + 2*score/150);
@@ -231,4 +239,5 @@ function createsnowball(){
         snowball.x = snowman.x+8
         snowball.y = snowman.y;
   }
+  snowballG.add(snowball);
 }
