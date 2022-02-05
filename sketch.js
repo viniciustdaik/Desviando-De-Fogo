@@ -211,7 +211,7 @@ function draw(){
 function createfire(){
   if(frameCount%160==0){
     fire = createSprite(2550, 2550);//50, 350
-    fire.debug = true;
+    //fire.debug = true;
     fire.lifetime = 650;
     if(select1 == 1){
       fire.addAnimation("fire", fireImg);
