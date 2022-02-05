@@ -19,7 +19,7 @@ function preload(){
   snowmanImg2 = loadAnimation("Snowman_2.png");
   fireImg = loadAnimation("fire1.png");
   fireImg2 = loadAnimation("fire2.png");
-  sceneimg = loadImage("backgroundog.png");
+  sceneimg = loadImage("backgroundsmall.png");
   snowballimg = loadImage("snowballfriend.png");
   leftbuttonimg = loadImage("left_arrow.png");
   rightbuttonimg = loadImage("right_arrow.png");
