@@ -18,7 +18,7 @@ function preload(){
   snowmanImg = loadAnimation("Snowman.png");
   snowmanImg2 = loadAnimation("Snowman_2.png");
   fireImg = loadAnimation("fire1small.png");
-  fireImg2 = loadAnimation("fire2.png");
+  fireImg2 = loadAnimation("fire2small.png");
   sceneimg = loadImage("backgroundsmall.png");
   snowballimg = loadImage("snowballfriend.png");
   leftbuttonimg = loadImage("left_arrow.png");
@@ -210,7 +210,7 @@ function draw(){
 
 function createfire(){
   if(frameCount%160==0){
-    fire = createSprite(450, 450);//50, 350
+    fire = createSprite(2550, 2550);//50, 350
     fire.debug = true;
     fire.lifetime = 650;
     if(select1 == 1){
@@ -220,8 +220,8 @@ function createfire(){
     }
     if(select1 == 2){
       fire.addAnimation("fire2", fireImg2);
-      fire.scale = 0.008;
-      fire.setCollider("circle", 0, 3500, 2999);
+      fire.scale = 0.18;//0.008
+      fire.setCollider("circle", 0, 153, 150);//3500, 2999
     }
     if(select2 == 1){
       fire.x = -50;
