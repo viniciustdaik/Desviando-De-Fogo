@@ -132,7 +132,10 @@ function draw(){
     if(keyDown("space")&&snowman.y > 285
     ||keyDown(UP_ARROW)&&snowman.y > 285
     ||keyDown("W")&&snowman.y > 285
-    ||touches.length > 0&&snowman.y > 285){
+    ||touches.length > 0&&snowman.y > 285
+    &&!mouseIsOver(leftbutton)
+    &&!mouseIsOver(rightbutton)
+    &&!mouseIsOver(snowballbutton)){
       snowman.velocityY = -15.5;
       touches = [];
     }
