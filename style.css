@@ -2,6 +2,59 @@ html, body {
   margin: 0;
   padding: 0;
 }
+
 canvas {
   display: block;
 }
+
+.leftbutton{
+  width:70px;
+  height: 70px;
+  border-radius: 35px;
+  background-image: url('../left_arrow.png');
+  background-color: #80deea;
+  padding: 10px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  outline: none;
+}
+
+.rightbutton{
+  width:70px;
+  height: 70px;
+  border-radius: 35px;
+  background-image: url('../right_arrow.png');
+  background-color: #80deea;
+  padding: 10px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  outline: none;
+}
+
+.snowballbutton{
+  width:70px;
+  height: 70px;
+  border-radius: 35px;
+  background-image: url('../snowball/snowballfriend.png');
+  background-color: #80deea;
+  padding: 10px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  outline: none;
+}
+
