@@ -14,16 +14,18 @@ var snowballtbutton, snowballbuttonimg,
 leftbutton, leftbuttonimg, 
 rightbutton, rightbuttonimg;
 
+var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
 function preload(){
-  snowmanImg = loadAnimation("Snowman.png");
-  snowmanImg2 = loadAnimation("Snowman_2.png");
-  fireImg = loadAnimation("fire1small.png");
-  fireImg2 = loadAnimation("fire2small.png");
+  snowmanImg = loadAnimation("./snowman/Snowman.png");
+  snowmanImg2 = loadAnimation("./snowman/Snowman_2.png");
+  fireImg = loadAnimation("./fire/fire1small.png");
+  fireImg2 = loadAnimation("./fire/fire2small.png");
   sceneimg = loadImage("backgroundsmall.png");
-  snowballimg = loadImage("snowballfriend.png");
+  snowballimg = loadImage("./snowball/snowballfriend.png");
   leftbuttonimg = loadImage("left_arrow.png");
   rightbuttonimg = loadImage("right_arrow.png");
-  snowballbuttonimg = loadImage("snowballbutton.png");
+  snowballbuttonimg = loadImage("./snowball/snowballbutton.png");
 }
 
 function setup(){
@@ -33,18 +35,34 @@ function setup(){
   scene.visible = false;
   //scene.addImage("background", sceneimg);
   //scene.scale = 0.2;//0.05 //2
-  
-  leftbutton = createSprite(width/2-85, 55, 15, 15);
-  leftbutton.addImage("leftbuttonimg", leftbuttonimg);
-  leftbutton.visible = false;
-  
-  rightbutton = createSprite(width/2+85, 55, 15, 15);
-  rightbutton.addImage("rightbuttonimg", rightbuttonimg);
-  rightbutton.visible = false;
-  
-  snowballbutton = createSprite(width/2, 55, 15, 15);
-  snowballbutton.addImage("snowbalbuttonimg", snowballbuttonimg);
-  snowballbutton.visible = false;
+
+  //oldleftbutton
+  //leftbutton = createSprite(width/2-85, 55, 15, 15);
+  //leftbutton.addImage("leftbuttonimg", leftbuttonimg);
+  //leftbutton.visible = false;
+  //newleftbutton
+  leftbutton = createButton("");
+  leftbutton.class("leftbutton");
+  leftbutton.position(width / 2 - 85, -155);
+  leftbutton.mousePressed(moveleft);
+  //oldrightbutton
+  //rightbutton = createSprite(width/2+85, 55, 15, 15);
+  //rightbutton.addImage("rightbuttonimg", rightbuttonimg);
+  //rightbutton.visible = false;
+  //newrightbutton
+  rightbutton = createButton("");
+  rightbutton.class("rightbutton");
+  rightbutton.position(width / 2 + 85, -155);
+  rightbutton.mousePressed(moveright);
+  //oldsnowballbutton
+  //snowballbutton = createSprite(width/2, 55, 15, 15);
+  //snowballbutton.addImage("snowbalbuttonimg", snowballbuttonimg);
+  //snowballbutton.visible = false;
+  //newsnowballbutton
+  snowballbutton = createButton("");
+  snowballbutton.class("snowballbutton");
+  snowballbutton.position(width / 2, -155);
+  snowballbutton.mousePressed(createsnowball);
   
   snowman = createSprite(width/2, height/2, 15, 15);//200, 200
   snowman.addAnimation("snowman2", snowmanImg2);
@@ -77,6 +95,8 @@ function draw(){
     textSize(20);
     text("Dica: Quando Você Sobrevive Por Um Tempo ", 15, 75);
     text("Ganha Uma Bola De Neve!", 15, 95);
+    text("Pressione A/Seta Para Virar Para A Esquerda.", 15, 135);
+    text("Pressione D/Seta Para Virar Para A Direita.", 15, 175);
     text("Dica: Pressione E Para Tacar Uma Bola De Neve!", 15, 45); 
     text("Clique Para Começar!", 15, 25);
     if(mousePressedOver(scene)
@@ -122,8 +142,13 @@ function draw(){
     fireG.destroyEach();
   }
   if(gamestate == "play"){
-    if(snowballnum > 0&&keyWentDown("E")
-    ||snowballnum > 0&&mouseIsOver(snowballbutton)){
+    //if(isMobile){
+      leftbutton.position(width/2 - 85 -35, 25);
+      rightbutton.position(width/2 + 85 - 35, 25);
+      snowballbutton.position(width/2 - 35, 25);
+    //}
+    if(snowballnum > 0 && keyWentDown("E")){
+    //||snowballnum > 0 && mouseIsOver(snowballbutton)){
       createsnowball();
     }
     if(score%500==0){
@@ -150,16 +175,16 @@ function draw(){
     createfire();
     
     if(keyWentDown(LEFT_ARROW)
-    ||keyWentDown("A")
-    ||mouseIsOver(leftbutton)){
+    ||keyWentDown("A")){
+    //||mouseIsOver(leftbutton)){
       //snowman.x = snowman.x-5;
       left = true;
       right = false;
       snowman.changeAnimation("snowman", snowmanImg);
     }
     if(keyWentDown(RIGHT_ARROW)
-    ||keyWentDown("D")
-    ||mouseIsOver(rightbutton)){
+    ||keyWentDown("D")){
+    //||mouseIsOver(rightbutton)){
       //snowman.x = snowman.x+5;
       right = true;
       left = false;
@@ -177,6 +202,9 @@ function draw(){
   
   }
   if(gamestate == "end"){
+    leftbutton.position(width / 2 - 85, -155);
+    rightbutton.position(width / 2 + 85, -155);
+    snowballbutton.position(width / 2, -155);
     //scene.velocityX = 0;
     snowman.visible = false;
     rightbutton.visible = false;
@@ -260,21 +288,37 @@ function reset(){
 }
 
 function createsnowball(){
+  if(snowballnum > 0){
     snowball = createSprite(-50, -50, 15, 15);
     snowball.addImage("snowball", snowballimg);
     snowball.lifetime = 150;
     snowball.scale = 2.8;
     if(left == true){
-        snowballnum = snowballnum-1;
-        snowball.velocityX = -(5 + 2*score/150);
-        snowball.x = snowman.x-8
-        snowball.y = snowman.y;
+      snowballnum = snowballnum-1;
+      snowball.velocityX = -(5 + 2*score/150);
+      snowball.x = snowman.x-8
+      snowball.y = snowman.y;
     }
     if(right == true){
-        snowballnum = snowballnum-1;
-        snowball.velocityX = +(5 + 2*score/150);
-        snowball.x = snowman.x+8
-        snowball.y = snowman.y;
+      snowballnum = snowballnum-1;
+      snowball.velocityX = +(5 + 2*score/150);
+      snowball.x = snowman.x+8
+      snowball.y = snowman.y;
+    }
+    snowballG.add(snowball);
   }
-  snowballG.add(snowball);
+}
+
+function moveleft(){
+  //snowman.x = snowman.x-5;
+  left = true;
+  right = false;
+  snowman.changeAnimation("snowman", snowmanImg);
+}
+
+function moveright(){
+  //snowman.x = snowman.x+5;
+  right = true;
+  left = false;
+  snowman.changeAnimation("snowman2", snowmanImg2);
 }
