@@ -265,7 +265,7 @@ function createfire(){
     if(select3 == 2){
       fire.y = windowHeight-250;
     }*/
-    fire.y = Math.round(random(200, 675));
+    fire.y = Math.round(random(200, windowHeight - 115));//200, 675
     //console.log("Created Fire!");
     fireG.add(fire);
   }
