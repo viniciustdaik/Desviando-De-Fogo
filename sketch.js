@@ -359,7 +359,7 @@ function windowResized() {
   if(height == 864 && windowHeight < 864){
     resizeCanvas(width, windowHeight);
     invisibleground.y = height + 5;
-    outofzonehitboxdown.y = height - 45;
+    outofzonehitboxdown.y = height + 25;
     //snowman.y = invisibleground.y - 35;
     //edges.destroyEach();
     //edges = createEdgeSprites();
