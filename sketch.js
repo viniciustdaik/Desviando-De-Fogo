@@ -1,5 +1,5 @@
 var score = 0;
-var edges;
+var edges, invisibleground, outofzonehitboxdown;
 var gamestate = "server";
 var snowman, snowmanImg, snowmanImg2;
 var fire, fireImg, fireImg2, fireG;
@@ -73,35 +73,49 @@ function setup(){
   //snowman.debug = true;
   snowman.setCollider("rectangle", 0, 45, 70, 310);
 
-  edges = createEdgeSprites();
-  
+  //edges = createEdgeSprites();
+  invisibleground = createSprite(width / 2, height + 5, width, 10);
+  invisibleground.visible = false;
+  outofzonehitboxdown = createSprite(width / 2, height + 25, width, 10);
+  outofzonehitboxdown.visible = false;
+
   fireG = new Group();
   snowballG = new Group();
 }
 
 function draw(){
-  background('lightblue');
-  image(sceneimg, 0, 0, width, height);
-  if(gamestate == "end"||gamestate == "play"){
+  background(sceneimg);//('lightblue');
+  //image(sceneimg, 0, 0, width, height);
+
+  if(snowman.isTouching(outofzonehitboxdown)){
+    snowman.y = invisibleground.y - 35;
+  }
+  
+  if(gamestate == "end" || gamestate == "play"){
     textSize(25);
     fill('gold');
     stroke('green');
     text("Pontuação: "+score, 25, 45);
     text("Melhor Pontuação: "+highscore, 25, 75);
     text("Bolas De Neve: "+snowballnum, 25, 105);
+    
   }
+  
   if(gamestate == "server"){
     fill('cyan');
     stroke('green');
     textSize(30);
     text("Dica: Quando Você Sobrevive Por Um Tempo ", 15, 85);
     text("Ganha Uma Bola De Neve!", 15, 115);
-    text("Pressione A/Seta Para Virar Para A Esquerda.", 15, 155);
-    text("Pressione D/Seta Para Virar Para A Direita.", 15, 185);
     if(!isMobile){
+      text("Pressione A/Seta Para Virar Para A Esquerda.", 15, 155);
+      text("Pressione D/Seta Para Virar Para A Direita.", 15, 185);
       text("Dica: Pressione E Para Tacar Uma Bola De Neve!", 15, 55); 
       text("Clique Para Começar!", 15, 25);
     }else{
+      text("Pressione Seta Esquerda Para Virar Para A Esquerda.", 15, 155);
+      text("Pressione Seta Direita Para Virar Para A Direita.", 15, 185)
+      text("Dica: Pressione A Bola De Neve Para Tacar Uma Bola De Neve!", 15, 55); ;
       text("Toque Para Começar!", 15, 25);
     }
     
@@ -119,7 +133,10 @@ function draw(){
   }
   //console.log("left: "+left);
   //console.log("right: "+right);
-  snowman.collide(edges[3]);
+
+  //snowman.collide(edges[3]);
+  snowman.collide(invisibleground);
+
   select1 = Math.round(random(1, 2));
   select2 = Math.round(random(1, 2));
   select3 = Math.round(random(1, 2));
@@ -272,7 +289,7 @@ function createfire(){
     if(select3 == 2){
       fire.y = windowHeight-250;
     }*/
-    fire.y = Math.round(random(200, windowHeight - 115));//200, 675
+    fire.y = Math.round(random(200, height - 115));//200, 675
     console.log("Created Fire!");
     fireG.add(fire);
   }
@@ -328,5 +345,31 @@ function moveright(){
   right = true;
   left = false;
   snowman.changeAnimation("snowman2", snowmanImg2);
+}
+
+function windowResized() {
+  if(windowHeight > 760){// || height == 864 && windowHeight < 864){
+    resizeCanvas(width, windowHeight);
+    invisibleground.y = height - 45;
+    outofzonehitboxdown.y = height - 45;
+    //snowman.y = invisibleground.y - 35;
+    //edges.destroyEach();
+    //edges = createEdgeSprites();
+  }
+  if(height == 864 && windowHeight < 864){
+    resizeCanvas(width, windowHeight);
+    invisibleground.y = height + 5;
+    outofzonehitboxdown.y = height - 45;
+    //snowman.y = invisibleground.y - 35;
+    //edges.destroyEach();
+    //edges = createEdgeSprites();
+  }
+  if(isMobile){
+    resizeCanvas(windowWidth, windowHeight);
+    invisibleground.y = height - 45;
+    outofzonehitboxdown.y = height - 45;
+  }
+  
+  
 }
 
