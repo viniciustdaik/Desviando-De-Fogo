@@ -13,6 +13,7 @@ var snowball, snowballimg, snowballG;
 var snowballtbutton, snowballbuttonimg, 
 leftbutton, leftbuttonimg, 
 rightbutton, rightbuttonimg;
+var buttonAllowed = false;
 
 var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -92,16 +93,22 @@ function draw(){
   if(gamestate == "server"){
     fill('cyan');
     stroke('green');
-    textSize(20);
-    text("Dica: Quando Você Sobrevive Por Um Tempo ", 15, 75);
-    text("Ganha Uma Bola De Neve!", 15, 95);
-    text("Pressione A/Seta Para Virar Para A Esquerda.", 15, 135);
-    text("Pressione D/Seta Para Virar Para A Direita.", 15, 175);
-    text("Dica: Pressione E Para Tacar Uma Bola De Neve!", 15, 45); 
-    text("Clique Para Começar!", 15, 25);
+    textSize(30);
+    text("Dica: Quando Você Sobrevive Por Um Tempo ", 15, 85);
+    text("Ganha Uma Bola De Neve!", 15, 115);
+    text("Pressione A/Seta Para Virar Para A Esquerda.", 15, 155);
+    text("Pressione D/Seta Para Virar Para A Direita.", 15, 185);
+    if(!isMobile){
+      text("Dica: Pressione E Para Tacar Uma Bola De Neve!", 15, 55); 
+      text("Clique Para Começar!", 15, 25);
+    }else{
+      text("Toque Para Começar!", 15, 25);
+    }
+    
     if(mousePressedOver(scene)
     ||mousePressedOver(snowman)
     ||touches.length > 0){
+      touches = [];
       gamestate = "play";
       //scene.visible = true;
       snowman.visible = true;
@@ -120,7 +127,7 @@ function draw(){
   //console.log("snowmanY: "+Math.round(snowman.y));
   console.log(snowballnum);
   //console.log(World.mouseX);
-  console.log(windowWidth);
+  //console.log(windowWidth);
     //if(scene.x < 450){//80 //680
     //  scene.x = windowWidth-800;//320
     //}
@@ -142,11 +149,11 @@ function draw(){
     fireG.destroyEach();
   }
   if(gamestate == "play"){
-    //if(isMobile){
+    if(isMobile || buttonAllowed == true){
       leftbutton.position(width/2 - 85 -35, 25);
       rightbutton.position(width/2 + 85 - 35, 25);
       snowballbutton.position(width/2 - 35, 25);
-    //}
+    }
     if(snowballnum > 0 && keyWentDown("E")){
     //||snowballnum > 0 && mouseIsOver(snowballbutton)){
       createsnowball();
@@ -266,7 +273,7 @@ function createfire(){
       fire.y = windowHeight-250;
     }*/
     fire.y = Math.round(random(200, windowHeight - 115));//200, 675
-    //console.log("Created Fire!");
+    console.log("Created Fire!");
     fireG.add(fire);
   }
 }
@@ -322,3 +329,4 @@ function moveright(){
   left = false;
   snowman.changeAnimation("snowman2", snowmanImg2);
 }
+
