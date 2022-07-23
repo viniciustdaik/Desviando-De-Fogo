@@ -10,9 +10,9 @@ var scene, sceneimg;
 var highscore = 0;
 var snowballnum = 0;
 var snowball, snowballimg, snowballG;
-var snowballtbutton, snowballbuttonimg, 
-leftbutton, leftbuttonimg, 
-rightbutton, rightbuttonimg;
+var snowballbutton, snowballbuttonHitbox, snowballbuttonimg, 
+leftbutton, leftbuttonHitbox, leftbuttonimg, 
+rightbutton, rightbuttonHitbox, rightbuttonimg;
 var buttonAllowed = false;
 
 var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -46,6 +46,10 @@ function setup(){
   leftbutton.class("leftbutton");
   leftbutton.position(width / 2 - 85, -155);
   leftbutton.mousePressed(moveleft);
+
+  leftbuttonHitbox = createSprite(leftbutton.x + 35, leftbutton.y + 35, 75, 75);
+  leftbuttonHitbox.visible = false;
+
   //oldrightbutton
   //rightbutton = createSprite(width/2+85, 55, 15, 15);
   //rightbutton.addImage("rightbuttonimg", rightbuttonimg);
@@ -55,6 +59,10 @@ function setup(){
   rightbutton.class("rightbutton");
   rightbutton.position(width / 2 + 85, -155);
   rightbutton.mousePressed(moveright);
+
+  rightbuttonHitbox = createSprite(rightbutton.x + 35, rightbutton.y + 35, 75, 75);
+  rightbuttonHitbox.visible = false;
+
   //oldsnowballbutton
   //snowballbutton = createSprite(width/2, 55, 15, 15);
   //snowballbutton.addImage("snowbalbuttonimg", snowballbuttonimg);
@@ -64,6 +72,9 @@ function setup(){
   snowballbutton.class("snowballbutton");
   snowballbutton.position(width / 2, -155);
   snowballbutton.mousePressed(createsnowball);
+
+  snowballbuttonHitbox = createSprite(snowballbutton.x + 35, snowballbutton.y + 35, 75, 75);
+  snowballbuttonHitbox.visible = false;
   
   snowman = createSprite(width/2, height/2, 15, 15);//200, 200
   snowman.addAnimation("snowman2", snowmanImg2);
@@ -84,6 +95,21 @@ function setup(){
 }
 
 function draw(){
+  if(leftbuttonHitbox.x !== leftbutton.x + 35
+  ||leftbuttonHitbox.y !== leftbutton.y + 35){
+    leftbuttonHitbox.x = leftbutton.x + 35;
+    leftbuttonHitbox.y = leftbutton.y + 35;
+  }
+  if(rightbuttonHitbox.x !== rightbutton.x + 35
+  ||rightbuttonHitbox.y !== rightbutton.y + 35){
+    rightbuttonHitbox.x = rightbutton.x + 35;
+    rightbuttonHitbox.y = rightbutton.y + 35;
+  }
+  if(snowballbuttonHitbox.x !== snowballbutton.x + 35
+  ||snowballbuttonHitbox.y !== snowballbutton.y + 35){
+    snowballbuttonHitbox.x = snowballbutton.x + 35;
+    snowballbuttonHitbox.y = snowballbutton.y + 35;
+  }
   background(sceneimg);//('lightblue');
   //image(sceneimg, 0, 0, width, height);
 
@@ -178,13 +204,13 @@ function draw(){
     if(score%500==0){
       snowballnum = snowballnum+1;
       }
-    if(keyDown("space")&&snowman.y > 285
-    ||keyDown(UP_ARROW)&&snowman.y > 285
-    ||keyDown("W")&&snowman.y > 285
-    ||touches.length > 0&&snowman.y > 285
-    &&!mouseIsOver(leftbutton)
-    &&!mouseIsOver(rightbutton)
-    &&!mouseIsOver(snowballbutton)){
+    if(keyDown("space") && snowman.y > 285
+    ||keyDown(UP_ARROW) && snowman.y > 285
+    ||keyDown("W") && snowman.y > 285
+    ||touches.length > 0 && snowman.y > 285
+    &&!mouseIsOver(leftbuttonHitbox)
+    &&!mouseIsOver(rightbuttonHitbox)
+    &&!mouseIsOver(snowballbuttonHitbox)){
       snowman.velocityY = -15.5;
       touches = [];
     }
