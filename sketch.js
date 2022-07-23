@@ -357,6 +357,8 @@ function createsnowball(){
     }
     snowballG.add(snowball);
   }
+
+  touches = [];
 }
 
 function moveleft(){
@@ -364,6 +366,8 @@ function moveleft(){
   left = true;
   right = false;
   snowman.changeAnimation("snowman", snowmanImg);
+
+  touches = [];
 }
 
 function moveright(){
@@ -371,6 +375,8 @@ function moveright(){
   right = true;
   left = false;
   snowman.changeAnimation("snowman2", snowmanImg2);
+
+  touches = [];
 }
 
 function windowResized() {
